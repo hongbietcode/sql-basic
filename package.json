@@ -1,0 +1,23 @@
+{
+  "name": "sql-basic-learning",
+  "version": "1.0.0",
+  "description": "Lộ trình học SQL từ cơ bản đến nâng cao - E-commerce Database",
+  "scripts": {
+    "dev": "honkit serve",
+    "build": "honkit build",
+    "clean": "rm -rf _book"
+  },
+  "keywords": [
+    "sql",
+    "mysql",
+    "database",
+    "learning",
+    "tutorial",
+    "vietnamese"
+  ],
+  "author": "Huu Tri",
+  "license": "MIT",
+  "devDependencies": {
+    "honkit": "^6.1.4"
+  }
+}

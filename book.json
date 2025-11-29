@@ -1,0 +1,19 @@
+{
+  "title": "SQL Cơ Bản - Nâng Cao",
+  "description": "Lộ trình học SQL từ cơ bản đến nâng cao với E-commerce Database",
+  "author": "Huu Tri",
+  "language": "vi",
+  "gitbook": ">=3.0.0",
+  "structure": {
+    "readme": "README.md",
+    "summary": "SUMMARY.md"
+  },
+  "links": {
+    "sidebar": {
+      "GitHub Repository": "https://github.com/yourusername/sql-basic",
+      "MySQL Docs": "https://dev.mysql.com/doc/"
+    }
+  },
+  "plugins": [],
+  "pluginsConfig": {}
+}
