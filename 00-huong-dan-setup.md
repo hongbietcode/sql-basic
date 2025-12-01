@@ -1,178 +1,121 @@
-# Hướng Dẫn Setup MySQL với Docker
+# Hướng Dẫn Setup MySQL Workbench
 
-Chúng ta sẽ sử dụng **Docker** để chạy MySQL, giúp setup nhanh chóng và không ảnh hưởng đến hệ thống.
+Để học SQL, bạn cần một công cụ để kết nối và thực hành với database. **MySQL Workbench** là công cụ chính thức từ MySQL, miễn phí và mạnh mẽ.
 
-## Bước 1: Cài Đặt Docker Desktop
+## Bước 1: Download MySQL Workbench
+
+### Link Download Chính Thức
+**🔗 https://dev.mysql.com/downloads/workbench/**
+
+### Chọn Phiên Bản Phù Hợp
+
+#### macOS
+1. Truy cập: https://dev.mysql.com/downloads/workbench/
+2. Chọn **"macOS"** trong Select Operating System
+3. Chọn phiên bản phù hợp:
+   - **macOS (ARM, 64-bit), DMG Archive** - Cho Mac M1/M2/M3
+   - **macOS (x86, 64-bit), DMG Archive** - Cho Mac Intel
+4. Click **"Download"**
+5. Có thể bỏ qua đăng nhập bằng cách click **"No thanks, just start my download"**
+
+#### Windows
+1. Truy cập: https://dev.mysql.com/downloads/workbench/
+2. Chọn **"Microsoft Windows"**
+3. Download file `.msi` installer
+4. Click **"Download"**
+5. Bỏ qua đăng nhập nếu không muốn
+
+#### Linux (Ubuntu/Debian)
+```bash
+# Thêm repository
+sudo apt update
+sudo apt install mysql-workbench
+```
+
+#### Linux (Fedora/RedHat)
+```bash
+sudo dnf install mysql-workbench
+```
+
+## Bước 2: Cài Đặt MySQL Workbench
 
 ### macOS
-1. Download Docker Desktop: https://www.docker.com/products/docker-desktop
-2. Mở file `.dmg` và kéo Docker vào Applications
-3. Khởi động Docker Desktop từ Applications
-4. Chờ Docker khởi động (biểu tượng cá voi trên menu bar)
+1. Mở file `.dmg` đã download
+2. Kéo **MySQL Workbench** vào thư mục **Applications**
+3. Mở MySQL Workbench từ Applications
+4. Nếu gặp cảnh báo security:
+   - Mở **System Settings** → **Privacy & Security**
+   - Click **"Open Anyway"** bên cạnh MySQL Workbench
 
 ### Windows
-1. Download Docker Desktop: https://www.docker.com/products/docker-desktop
-2. Chạy installer và làm theo hướng dẫn
-3. Restart máy nếu được yêu cầu
-4. Khởi động Docker Desktop
-5. Enable WSL 2 nếu được nhắc
+1. Double-click file `.msi` installer
+2. Click **"Next"** để tiếp tục
+3. Chọn **"Complete"** installation
+4. Click **"Install"**
+5. Chờ quá trình cài đặt hoàn tất
+6. Click **"Finish"**
+7. Khởi động MySQL Workbench
 
 ### Linux
-```bash
-# Ubuntu/Debian
-sudo apt-get update
-sudo apt-get install docker.io docker-compose
-sudo systemctl start docker
-sudo systemctl enable docker
-```
+Sau khi cài đặt qua package manager, mở MySQL Workbench từ Applications menu.
 
-### Verify Docker
-```bash
-docker --version
-# Output: Docker version 24.x.x
+## Bước 3: Kết Nối Với Database Server
 
-docker-compose --version
-# Output: Docker Compose version v2.x.x
-```
-
-## Bước 2: Download Dự Án
-
-### Option 1: Git Clone (Recommended)
-```bash
-git clone <repository-url>
-cd sql-basic
-```
-
-### Option 2: Download ZIP
-1. Download ZIP từ GitHub
-2. Giải nén vào thư mục bạn muốn
-3. Mở terminal/cmd tại thư mục đó
-
-## Bước 3: Khởi Động MySQL Container
-
-```bash
-# Di chuyển vào thư mục dự án
-cd sql-basic
-
-# Khởi động MySQL container (chạy background)
-docker-compose up -d
-```
-
-**Output mong đợi:**
-```
-[+] Running 2/2
- ✔ Network sql-basic_default  Created
- ✔ Container sql-learning-mysql  Started
-```
-
-### Giải Thích Lệnh
-- `docker-compose` - Công cụ quản lý multi-container
-- `up` - Khởi động services
-- `-d` - Detached mode (chạy background)
-
-### Kiểm Tra Container
-```bash
-# Xem containers đang chạy
-docker ps
-
-# Output:
-# CONTAINER ID   IMAGE       STATUS         PORTS                    NAMES
-# abc123...      mysql:8.0   Up 2 minutes   0.0.0.0:3306->3306/tcp   sql-learning-mysql
-```
-
-### Xem Logs
-```bash
-# Xem logs của MySQL container
-docker-compose logs -f
-
-# Thoát: Ctrl + C
-```
-
-Chờ đến khi thấy:
-```
-[Server] /usr/sbin/mysqld: ready for connections
-```
-
-## Bước 4: Kết Nối với MySQL
+Database đã được deploy sẵn trên server để bạn có thể thực hành.
 
 ### Thông Tin Kết Nối
 
+**Lưu ý:** Admin sẽ cung cấp thông tin kết nối chính xác. Dưới đây là template:
+
 | Field | Value |
 |-------|-------|
-| **Host** | localhost (hoặc 127.0.0.1) |
-| **Port** | 3306 |
-| **Database** | ecommerce_db |
-| **Username** | sqllearner |
-| **Password** | learner_password_123 |
-| **Root Password** | root_password_123 |
+| **Connection Name** | SQL Learning - Ecommerce |
+| **Hostname** | `<server-ip-hoặc-domain>` |
+| **Port** | 3306 (hoặc port khác nếu được chỉ định) |
+| **Username** | `sqllearner` |
+| **Password** | `<sẽ-được-cung-cấp>` |
+| **Default Schema** | `ecommerce_db` |
 
-### Option 1: MySQL Workbench (Recommended)
+### Tạo Connection Mới
 
-1. Mở MySQL Workbench
-2. Click **"+"** để tạo connection mới
-3. Điền thông tin:
-   - Connection Name: `SQL Learning - Ecommerce`
-   - Hostname: `localhost`
-   - Port: `3306`
-   - Username: `sqllearner`
-4. Click **"Store in Keychain"** và nhập password: `learner_password_123`
-5. Click **"Test Connection"** → Should show "Successfully connected"
-6. Click **"OK"**
-7. Double-click connection để kết nối
+1. **Mở MySQL Workbench**
 
-### Option 2: DBeaver
+2. **Tạo Connection Mới:**
+   - Click biểu tượng **"+"** bên cạnh "MySQL Connections"
+   - Hoặc menu: **Database** → **Manage Connections** → **New**
 
-1. Mở DBeaver
-2. Click **"New Database Connection"** (plug icon)
-3. Chọn **MySQL**
-4. Điền thông tin:
-   - Server Host: `localhost`
-   - Port: `3306`
-   - Database: `ecommerce_db`
-   - Username: `sqllearner`
-   - Password: `learner_password_123`
-5. Click **"Test Connection"**
-6. Download driver nếu được yêu cầu
-7. Click **"Finish"**
+3. **Điền Thông Tin:**
+   - **Connection Name:** `SQL Learning - Ecommerce` (hoặc tên bạn muốn)
+   - **Connection Method:** `Standard (TCP/IP)`
+   - **Hostname:** Nhập IP hoặc domain của server (sẽ được cung cấp)
+   - **Port:** `3306` (mặc định, hoặc theo hướng dẫn)
+   - **Username:** `sqllearner`
+   - **Default Schema:** `ecommerce_db`
 
-### Option 3: TablePlus
+4. **Lưu Password:**
+   - Click **"Store in Keychain..."** (macOS) hoặc **"Store in Vault..."** (Windows/Linux)
+   - Nhập password đã được cung cấp
+   - Click **"OK"**
 
-1. Mở TablePlus
-2. Click **"Create a new connection"**
-3. Chọn **MySQL**
-4. Điền thông tin như trên
-5. Click **"Test"** → Thành công
-6. Click **"Connect"**
+5. **Test Connection:**
+   - Click nút **"Test Connection"**
+   - Nếu thành công, sẽ thấy: "Successfully made the MySQL connection"
+   - Nếu thất bại, xem phần Troubleshooting bên dưới
 
-### Option 4: Command Line
+6. **Lưu Connection:**
+   - Click **"OK"** để lưu connection
 
-```bash
-# Kết nối với MySQL
-mysql -h localhost -P 3306 -u sqllearner -p ecommerce_db
+7. **Kết Nối:**
+   - Double-click vào connection vừa tạo
+   - MySQL Workbench sẽ mở SQL Editor
 
-# Nhập password: learner_password_123
-```
+## Bước 4: Verify Database
 
-Hoặc qua Docker:
-```bash
-docker exec -it sql-learning-mysql mysql -u sqllearner -p ecommerce_db
-```
-
-### Option 5: VS Code Extension
-
-1. Install extension: **MySQL** (by Jun Han)
-2. Click MySQL icon ở sidebar
-3. Click **"+"** để add connection
-4. Điền thông tin như trên
-5. Kết nối và bắt đầu query
-
-## Bước 5: Verify Database
-
-Sau khi kết nối, chạy các câu SQL sau để verify:
+Sau khi kết nối thành công, chạy các câu SQL sau để kiểm tra:
 
 ### Kiểm Tra Các Bảng
 ```sql
--- Xem tất cả bảng
+-- Xem tất cả bảng trong database
 SHOW TABLES;
 ```
 
@@ -189,11 +132,12 @@ SHOW TABLES;
 | products               |
 | reviews                |
 +------------------------+
+7 rows in set
 ```
 
 ### Đếm Records
 ```sql
--- Đếm số lượng records mỗi bảng
+-- Đếm số lượng records trong mỗi bảng
 SELECT
     'customers' as table_name, COUNT(*) as total FROM customers
 UNION ALL
@@ -219,7 +163,7 @@ SELECT 'cart', COUNT(*) FROM cart;
 | categories  |    10 |
 | products    |    50 |
 | orders      |   200 |
-| order_items |   500+ |
+| order_items |   500+|
 | reviews     |   150 |
 | cart        |    50 |
 +-------------+-------+
@@ -234,157 +178,260 @@ SELECT * FROM products LIMIT 5;
 SELECT * FROM customers LIMIT 5;
 
 -- Lấy 5 orders gần nhất
-SELECT * FROM orders ORDER BY created_at DESC LIMIT 5;
+SELECT * FROM orders
+ORDER BY created_at DESC
+LIMIT 5;
 ```
 
-Nếu bạn thấy dữ liệu → **Setup thành công!** 🎉
+**Nếu bạn thấy dữ liệu → Setup thành công!** 🎉
 
-## Các Lệnh Docker Hữu Ích
+## Sử Dụng MySQL Workbench
 
-### Quản Lý Container
+### Chạy SQL Queries
 
+1. **Mở SQL Editor:**
+   - Double-click vào connection đã tạo
+   - Hoặc click icon "SQL Editor" ở toolbar
+
+2. **Viết Query:**
+   - Gõ SQL query vào editor
+   - Ví dụ: `SELECT * FROM products LIMIT 10;`
+
+3. **Chạy Query:**
+   - **Chạy toàn bộ:** Click icon ⚡ (lightning bolt) hoặc `Ctrl+Shift+Enter`
+   - **Chạy query hiện tại:** Click icon ⚡ (1 lightning) hoặc `Ctrl+Enter`
+   - Kết quả sẽ hiển thị ở phần dưới
+
+4. **Xem Kết Quả:**
+   - Tab **Result Grid** hiển thị dữ liệu dạng bảng
+   - Tab **Output** hiển thị messages và errors
+   - Tab **Execution Plan** hiển thị query performance
+
+### Tính Năng Hữu Ích
+
+#### 1. Schema Navigator
+- Panel bên trái hiển thị:
+  - Databases
+  - Tables
+  - Views
+  - Stored Procedures
+- Right-click vào table → **Select Rows** để xem data nhanh
+
+#### 2. Query History
+- Menu: **Query** → **History**
+- Xem lại các queries đã chạy
+- Double-click để load lại query
+
+#### 3. Auto-Complete
+- Gõ tên table/column và nhấn `Ctrl+Space`
+- MySQL Workbench sẽ suggest
+
+#### 4. Format Query
+- Select query text
+- Menu: **Query** → **Beautify Query**
+- Hoặc `Ctrl+B`
+
+#### 5. Export Results
+- Right-click vào Result Grid
+- Chọn **Export** → Format (CSV, JSON, XML, HTML, etc.)
+
+#### 6. Multiple Query Tabs
+- `Ctrl+T` để mở tab mới
+- Có thể có nhiều queries đang chạy song song
+
+## Alternative Tools (Tùy Chọn)
+
+Nếu bạn muốn thử công cụ khác:
+
+### DBeaver (Free, Cross-platform)
+- Download: https://dbeaver.io/download/
+- Universal database tool
+- Support nhiều databases
+
+### TablePlus (Paid, Mac/Windows/Linux)
+- Download: https://tableplus.com/
+- Modern, fast UI
+- Free trial 14 ngày
+
+### HeidiSQL (Free, Windows only)
+- Download: https://www.heidisql.com/download.php
+- Lightweight, đơn giản
+
+### Command Line (Advanced)
 ```bash
-# Dừng MySQL container
-docker-compose stop
+# Cài MySQL Client
+# macOS
+brew install mysql-client
 
-# Khởi động lại
-docker-compose start
+# Ubuntu/Debian
+sudo apt install mysql-client
 
-# Restart
-docker-compose restart
-
-# Xem logs
-docker-compose logs -f mysql
-
-# Dừng và xóa container
-docker-compose down
-
-# Dừng và xóa cả volumes (xóa data)
-docker-compose down -v
-```
-
-### Truy Cập MySQL Shell
-
-```bash
-# Truy cập MySQL shell với user root
-docker exec -it sql-learning-mysql mysql -u root -p
-# Password: root_password_123
-
-# Hoặc với user sqllearner
-docker exec -it sql-learning-mysql mysql -u sqllearner -p ecommerce_db
-# Password: learner_password_123
-```
-
-### Backup Database
-
-```bash
-# Backup toàn bộ database
-docker exec sql-learning-mysql mysqldump -u sqllearner -plearner_password_123 ecommerce_db > backup.sql
-
-# Restore database
-docker exec -i sql-learning-mysql mysql -u sqllearner -plearner_password_123 ecommerce_db < backup.sql
-```
-
-### Reset Database
-
-Nếu muốn reset database về trạng thái ban đầu:
-
-```bash
-# Dừng và xóa container + volumes
-docker-compose down -v
-
-# Khởi động lại (sẽ tự động chạy lại init scripts)
-docker-compose up -d
+# Kết nối
+mysql -h <hostname> -P 3306 -u sqllearner -p ecommerce_db
 ```
 
 ## Troubleshooting
 
-### Port 3306 Đã Được Sử Dụng
+### Không Kết Nối Được Server
 
-**Lỗi:**
-```
-Error: Port 3306 is already in use
-```
+**Lỗi:** "Can't connect to MySQL server"
 
-**Giải pháp 1:** Dừng MySQL đang chạy trên hệ thống
+**Kiểm tra:**
+1. ✅ Hostname/IP đúng chưa?
+2. ✅ Port đúng chưa? (thường là 3306)
+3. ✅ Username/Password đúng chưa?
+4. ✅ Có internet connection?
+5. ✅ Firewall có block port 3306?
+
+**Giải pháp:**
 ```bash
-# macOS
-brew services stop mysql
+# Test kết nối với telnet
+telnet <hostname> 3306
 
-# Windows
-# Dừng MySQL service trong Services
-
-# Linux
-sudo systemctl stop mysql
+# Hoặc với netcat
+nc -zv <hostname> 3306
 ```
 
-**Giải pháp 2:** Đổi port trong `.env`
+Nếu không kết nối được → Liên hệ admin để kiểm tra:
+- Server có đang chạy?
+- Firewall có cho phép remote connections?
+- User có quyền remote access?
+
+### SSL Connection Error
+
+**Lỗi:** "SSL connection error"
+
+**Giải pháp:**
+1. Trong connection settings
+2. Tab **"SSL"**
+3. Set **"Use SSL"** = **"No"** (nếu server không require SSL)
+4. Hoặc **"Require"** nếu server yêu cầu SSL
+
+### Authentication Failed
+
+**Lỗi:** "Access denied for user 'sqllearner'@'%'"
+
+**Nguyên nhân:**
+- Password sai
+- User chưa được tạo trên server
+- User không có quyền remote access
+
+**Giải pháp:**
+- Kiểm tra lại password
+- Liên hệ admin để verify user permissions
+
+### Slow Connection
+
+Nếu kết nối chậm:
+1. Kiểm tra internet speed
+2. Thử đổi connection method → **Standard TCP/IP over SSH** (nếu có SSH access)
+3. Liên hệ admin kiểm tra server load
+
+### Port is Blocked
+
+**Lỗi:** "Can't connect" hoặc timeout
+
+**Kiểm tra firewall:**
+
+**macOS:**
 ```bash
-# Mở file .env và sửa
-MYSQL_PORT=3307  # Thay vì 3306
+# Check if port is open
+nc -zv <hostname> 3306
 ```
 
-Sau đó restart container:
+**Windows:**
 ```bash
-docker-compose down
-docker-compose up -d
+# Test with PowerShell
+Test-NetConnection -ComputerName <hostname> -Port 3306
 ```
 
-Kết nối với port mới: `localhost:3307`
+Nếu blocked → Liên hệ admin hoặc IT department.
 
-### Container Không Khởi Động
+### Database Not Found
 
-```bash
-# Xem logs để debug
-docker-compose logs mysql
+**Lỗi:** "Unknown database 'ecommerce_db'"
 
-# Kiểm tra container
-docker ps -a
-
-# Restart Docker Desktop
+**Giải pháp:**
+1. Bỏ trống **"Default Schema"** khi tạo connection
+2. Sau khi kết nối, chạy:
+```sql
+SHOW DATABASES;
+```
+3. Kiểm tra tên database chính xác
+4. Chọn database:
+```sql
+USE ecommerce_db;
 ```
 
-### Permission Denied (Linux)
+## Tips & Best Practices
 
-```bash
-# Thêm user vào docker group
-sudo usermod -aG docker $USER
+### 💡 Keyboard Shortcuts
 
-# Logout và login lại
+| Shortcut | Action |
+|----------|--------|
+| `Ctrl+Enter` | Execute current statement |
+| `Ctrl+Shift+Enter` | Execute all statements |
+| `Ctrl+T` | New query tab |
+| `Ctrl+/` | Comment/uncomment line |
+| `Ctrl+B` | Beautify/format query |
+| `Ctrl+Space` | Auto-complete |
+| `Ctrl+L` | Delete current line |
+
+### 💡 Query Tips
+
+```sql
+-- Always limit results khi test
+SELECT * FROM products LIMIT 10;
+
+-- Dùng comments để ghi chú
+-- Đây là comment 1 line
+
+/*
+Đây là comment
+nhiều lines
+*/
+
+-- Format queries cho dễ đọc
+SELECT
+    p.name,
+    p.price,
+    c.name AS category
+FROM products p
+JOIN categories c ON p.category_id = c.id
+WHERE p.price > 100000
+ORDER BY p.price DESC
+LIMIT 10;
 ```
 
-### MySQL Client Không Kết Nối Được
+### 💡 Safety Tips
 
-1. Kiểm tra container đang chạy: `docker ps`
-2. Kiểm tra port: `netstat -an | grep 3306`
-3. Ping localhost: `ping localhost`
-4. Thử kết nối qua command line trước
-5. Check firewall settings
+⚠️ **Cẩn thận với UPDATE/DELETE:**
+```sql
+-- ❌ NGUY HIỂM: Xóa tất cả data
+DELETE FROM products;
 
-## Lưu Ý Quan Trọng
+-- ✅ AN TOÀN: Có WHERE clause
+DELETE FROM products
+WHERE id = 123;
 
-⚠️ **Password trong .env**
-- File `.env` chứa passwords
-- Không commit file này lên Git public repo
-- Đã thêm `.env` vào `.gitignore`
+-- ✅ TỐT NHẤT: Test với SELECT trước
+SELECT * FROM products
+WHERE id = 123;
+-- Nếu OK → Đổi SELECT thành DELETE
+```
 
-⚠️ **Data Persistence**
-- Data được lưu trong Docker volumes
-- Chạy `docker-compose down -v` sẽ **XÓA DATA**
-- Backup trước khi xóa volumes
+⚠️ **Always backup trước khi UPDATE/DELETE nhiều rows**
 
-⚠️ **RAM Usage**
-- MySQL container dùng ~400MB RAM
-- Đóng Docker Desktop khi không dùng để tiết kiệm RAM
+⚠️ **Không share password lên internet**
 
 ## Tổng Kết
 
 Sau khi hoàn thành setup:
 
-✅ Docker Desktop đã cài và chạy
-✅ MySQL container đã khởi động
-✅ Database client đã kết nối thành công
-✅ Database có đầy đủ 7 bảng và 1000+ records
+✅ MySQL Workbench đã cài đặt
+✅ Connection đến server thành công
+✅ Database có đầy đủ 7 bảng và data
+✅ Đã test chạy queries cơ bản
 
 **Bạn đã sẵn sàng bắt đầu học SQL!** 🚀
 
@@ -395,3 +442,19 @@ Sau khi hoàn thành setup:
 Hoặc xem lại:
 
 ⬅️ [Giới Thiệu SQL](00-gioi-thieu.md) - Tổng quan về SQL
+
+## Lấy Thông Tin Kết Nối
+
+**Lưu ý quan trọng:** Thông tin kết nối database (hostname, username, password) sẽ được cung cấp riêng.
+
+Nếu bạn chưa có thông tin kết nối, vui lòng liên hệ để nhận:
+- Server hostname/IP
+- Database username
+- Password
+- Port (nếu khác 3306)
+
+---
+
+**Có thắc mắc?**
+- Tham khảo [Lỗi Thường Gặp](phu-luc/loi-thuong-gap.md)
+- Hoặc liên hệ support
